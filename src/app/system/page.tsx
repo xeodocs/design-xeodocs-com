@@ -80,8 +80,8 @@ export default function SystemPage() {
     return (
         <div className="flex h-full bg-background">
             {/* Left Sidebar */}
-            <aside className="w-72 border-r border-border bg-muted/20 overflow-y-auto flex-shrink-0 backdrop-blur-sm">
-                <nav className="p-4 space-y-1">
+            <aside className="w-72 border-r border-border bg-muted/20 overflow-y-auto flex-shrink-0 backdrop-blur-sm p-4">
+                <nav className="pt-3 space-y-1">
                     <h2 className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                         Documents
                     </h2>
@@ -122,9 +122,9 @@ export default function SystemPage() {
                 </div>
 
                 {/* Right Sidebar - TOC */}
-                <aside className="w-64 border-l border-border bg-background/50 overflow-y-auto hidden xl:block flex-shrink-0 p-6 backdrop-blur-sm">
-                    <div className="sticky top-6">
-                        <h3 className="font-semibold text-sm mb-4 text-foreground uppercase tracking-wider">
+                <aside className="w-72 border-l border-border bg-background/50 overflow-y-auto hidden xl:block flex-shrink-0 p-4 backdrop-blur-sm">
+                    <div className="sticky top-4">
+                        <h3 className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                             On this page
                         </h3>
                         <nav className="space-y-2 border-l border-border pl-4">
