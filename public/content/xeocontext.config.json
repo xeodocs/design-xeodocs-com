@@ -1,0 +1,8 @@
+{
+    "title": "XeoContext Demo",
+    "files": {
+        "systemDesign": "system-design.md",
+        "openapi": "openapi.yaml",
+        "asyncapi": "asyncapi.yaml"
+    }
+}

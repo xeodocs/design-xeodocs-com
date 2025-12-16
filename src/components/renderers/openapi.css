@@ -1,0 +1,13 @@
+/* Basic overrides for Swagger UI in dark mode if needed */
+.swagger-ui {
+    /* Font adjustments */
+    font-family: inherit;
+}
+
+.dark .swagger-container {
+    filter: invert(1) hue-rotate(180deg);
+}
+
+.dark .swagger-container img {
+    filter: invert(1) hue-rotate(180deg);
+}

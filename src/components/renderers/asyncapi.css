@@ -1,0 +1,10 @@
+/* Main container inversion with boosted contrast */
+.dark .asyncapi-container {
+    background-color: white !important;
+    filter: invert(1) hue-rotate(180deg) contrast(1.5) brightness(1.3);
+}
+
+.dark .asyncapi-container img,
+.dark .asyncapi-container pre {
+    filter: invert(1) hue-rotate(180deg);
+}
