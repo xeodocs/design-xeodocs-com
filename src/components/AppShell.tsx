@@ -29,9 +29,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     if (!config) return null;
 
     return (
-        <div className="min-h-screen flex flex-col bg-background text-foreground">
+        <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
             <Header title={config.title} />
-            <main className="flex-1 flex flex-col">
+            <main className="flex-1 flex flex-col overflow-hidden relative">
                 {children}
             </main>
         </div>

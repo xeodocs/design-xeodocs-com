@@ -19,6 +19,8 @@ export function Mermaid({ chart }: { chart: string }) {
         mermaid.initialize({
             startOnLoad: false,
             theme: theme === "dark" ? "dark" : "default",
+            fontFamily: "\"Geist\", sans-serif",
+            fontSize: 14,
         });
     }, [theme]);
 
@@ -31,7 +33,7 @@ export function Mermaid({ chart }: { chart: string }) {
                     setSvg(svg);
                 } catch (error) {
                     console.error("Mermaid rendering error:", error);
-                    setSvg(`<pre class="text-red-500">${error}</pre>`);
+                    setSvg(`<pre class="text-destructive">${error}</pre>`);
                 }
             };
             render();
@@ -60,15 +62,15 @@ export function Mermaid({ chart }: { chart: string }) {
 
     return (
         <>
-            <div className="relative group">
+            <div className="relative group my-8">
                 <div
                     ref={ref}
-                    className="mermaid flex justify-center p-4 bg-white dark:bg-neutral-800 rounded-md overflow-x-auto border border-neutral-200 dark:border-neutral-700"
+                    className="mermaid flex justify-center p-6 bg-card/50 backdrop-blur-sm rounded-xl overflow-x-auto border border-border/50 shadow-sm transition-all hover:border-primary/20 hover:shadow-md"
                     dangerouslySetInnerHTML={{ __html: svg }}
                 />
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="absolute top-2 right-2 p-2 bg-neutral-100 dark:bg-neutral-700 rounded-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-neutral-200 dark:hover:bg-neutral-600"
+                    className="absolute top-3 right-3 p-2 bg-background/80 backdrop-blur-md border border-border rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-accent hover:text-accent-foreground shadow-sm"
                     title="Expand"
                 >
                     <Maximize2 className="w-4 h-4" />
@@ -76,19 +78,8 @@ export function Mermaid({ chart }: { chart: string }) {
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <div className="bg-white dark:bg-neutral-900 w-full h-full rounded-lg flex flex-col overflow-hidden relative border dark:border-neutral-800">
-                        {/* Header/Controls */}
-                        <div className="absolute top-4 right-4 z-10 flex items-center space-x-2 bg-white/10 backdrop-blur-md p-2 rounded-lg border border-white/20">
-
-                            {/* Close Button at the very end */}
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors"
-                            >
-                                <X className="w-4 h-4" />
-                            </button>
-                        </div>
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/90 backdrop-blur-xl p-6 animate-in fade-in duration-200">
+                    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden relative border border-border bg-card/30 shadow-2xl">
 
                         <TransformWrapper
                             initialScale={1}
@@ -98,37 +89,49 @@ export function Mermaid({ chart }: { chart: string }) {
                         >
                             {({ zoomIn, zoomOut, resetTransform }) => (
                                 <>
-                                    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex items-center space-x-2 bg-neutral-100/80 dark:bg-neutral-800/80 backdrop-blur-md p-2 rounded-lg border dark:border-neutral-700 shadow-lg">
+                                    {/* Controls overlay */}
+                                    <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 flex items-center space-x-2 bg-background/60 backdrop-blur-md p-1.5 rounded-full border border-border/50 shadow-lg">
                                         <button
                                             onClick={() => zoomIn()}
-                                            className="p-2 hover:bg-white dark:hover:bg-neutral-700 rounded-md transition-colors"
+                                            className="p-2 hover:bg-accent text-muted-foreground hover:text-foreground rounded-full transition-colors"
                                             title="Zoom In"
                                         >
                                             <ZoomIn className="w-4 h-4" />
                                         </button>
+                                        <div className="w-px h-4 bg-border/50" />
                                         <button
                                             onClick={() => zoomOut()}
-                                            className="p-2 hover:bg-white dark:hover:bg-neutral-700 rounded-md transition-colors"
+                                            className="p-2 hover:bg-accent text-muted-foreground hover:text-foreground rounded-full transition-colors"
                                             title="Zoom Out"
                                         >
                                             <ZoomOut className="w-4 h-4" />
                                         </button>
+                                        <div className="w-px h-4 bg-border/50" />
                                         <button
                                             onClick={() => resetTransform()}
-                                            className="p-2 hover:bg-white dark:hover:bg-neutral-700 rounded-md transition-colors"
+                                            className="p-2 hover:bg-accent text-muted-foreground hover:text-foreground rounded-full transition-colors"
                                             title="Reset"
                                         >
                                             <RotateCcw className="w-4 h-4" />
                                         </button>
                                     </div>
 
-                                    <div className="flex-1 w-full h-full flex items-center justify-center bg-neutral-50 dark:bg-black/50 overflow-hidden cursor-move">
+                                    {/* Close Button */}
+                                    <button
+                                        onClick={() => setIsModalOpen(false)}
+                                        className="absolute top-6 right-6 z-20 p-2.5 bg-background/60 hover:bg-destructive hover:text-destructive-foreground backdrop-blur-md text-muted-foreground rounded-full border border-border/50 transition-all duration-200 shadow-lg"
+                                        title="Close"
+                                    >
+                                        <X className="w-5 h-5" />
+                                    </button>
+
+                                    <div className="flex-1 w-full h-full flex items-center justify-center cursor-move">
                                         <TransformComponent
                                             wrapperClass="!w-full !h-full"
                                             contentClass="!w-full !h-full flex items-center justify-center"
                                         >
                                             <div
-                                                className="min-w-min min-h-min p-10"
+                                                className="min-w-min min-h-min p-20"
                                                 dangerouslySetInnerHTML={{ __html: svg }}
                                             />
                                         </TransformComponent>

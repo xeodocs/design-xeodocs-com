@@ -7,7 +7,7 @@ import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import "highlight.js/styles/github-dark.css";
-// You might want to switch highlight style based on theme, but github-dark is usually okay for code blocks.
+// Consider switching to a theme that adapts or stays dark which is fine for code.
 
 import { Mermaid } from "./Mermaid";
 
@@ -17,11 +17,17 @@ interface MarkdownRendererProps {
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     return (
-        <div className="prose prose-neutral dark:prose-invert max-w-none px-4 py-8 
-            prose-headings:font-bold prose-h1:text-4xl prose-h2:text-2xl prose-h3:text-xl
-            prose-a:text-blue-600 dark:prose-a:text-blue-400 hover:prose-a:text-blue-500
-            prose-code:text-rose-500 dark:prose-code:text-rose-300 prose-code:bg-neutral-100 dark:prose-code:bg-neutral-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none
-            prose-pre:bg-neutral-900 prose-pre:text-neutral-50
+        <div className="prose prose-zinc dark:prose-invert max-w-none 
+            prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-foreground
+            prose-h1:text-4xl prose-h2:text-2xl prose-h3:text-xl
+            prose-p:text-muted-foreground prose-p:leading-relaxed
+            prose-strong:text-foreground prose-strong:font-semibold
+            prose-ul:text-muted-foreground prose-ol:text-muted-foreground
+            prose-a:text-primary prose-a:font-medium prose-a:no-underline prose-a:border-b prose-a:border-primary/30 hover:prose-a:border-primary prose-a:transition-colors
+            prose-code:text-primary prose-code:bg-muted/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-code:font-mono prose-code:text-sm
+            prose-pre:bg-[#0d1117] prose-pre:border prose-pre:border-border prose-pre:rounded-xl prose-pre:shadow-sm
+            prose-img:rounded-xl prose-img:shadow-md prose-img:border prose-img:border-border
+            prose-blockquote:border-l-primary prose-blockquote:bg-muted/20 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:text-muted-foreground prose-blockquote:not-italic
             ">
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}

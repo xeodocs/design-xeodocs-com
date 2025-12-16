@@ -26,5 +26,9 @@ export default function AsyncApiPage() {
 
     if (loading) return <div>Loading content...</div>;
 
-    return <AsyncApiRenderer schema={content} />;
+    return (
+        <div className="h-full overflow-y-auto">
+            <AsyncApiRenderer schema={content} />
+        </div>
+    );
 }
