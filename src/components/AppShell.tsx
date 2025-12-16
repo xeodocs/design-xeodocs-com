@@ -31,7 +31,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return (
         <div className="min-h-screen flex flex-col bg-background text-foreground">
             <Header title={config.title} />
-            <main className="flex-1 container mx-auto px-4 py-8">
+            <main className="flex-1 flex flex-col">
                 {children}
             </main>
         </div>

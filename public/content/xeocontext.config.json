@@ -1,7 +1,20 @@
 {
     "title": "XeoContext Demo",
     "files": {
-        "systemDesign": "system-design.md",
+        "systemDesign": [
+            {
+                "title": "Overview",
+                "path": "system-design/overview.md"
+            },
+            {
+                "title": "Database Schema",
+                "path": "system-design/database.md"
+            },
+            {
+                "title": "API Guidelines",
+                "path": "system-design/api-guidelines.md"
+            }
+        ],
         "openapi": "openapi.yaml",
         "asyncapi": "asyncapi.yaml"
     }

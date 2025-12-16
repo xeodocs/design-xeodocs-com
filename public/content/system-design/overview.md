@@ -1,4 +1,4 @@
-# System Design
+# System Design Overview
 
 This is a sample system design document.
 
@@ -13,4 +13,4 @@ graph TD
 ```
 
 ## Description
-The client communicates...
+The client communicates with the service via a load balancer. Read operations go to the database, while write operations are queued.

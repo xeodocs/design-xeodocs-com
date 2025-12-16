@@ -2,8 +2,9 @@ export interface XeoConfig {
     title: string;
     logo?: string;
     files: {
-        systemDesign?: string;
+        systemDesign?: { title: string; path: string }[];
         openapi?: string;
         asyncapi?: string;
     };
 }
+
