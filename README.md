@@ -1,12 +1,12 @@
 # XeoContext
 
-XeoContext is a modern "System Design" visualization tool built with Next.js and Tailwind CSS. It is designed to be a lightweight, self-contained viewer for:
+XeoContext is a modern "System Design" visualization tool. It is designed to be a lightweight, self-contained viewer for:
 
 - **System Design documents**: Markdown files with Mermaid diagram support.
 - **OpenAPI definitions**: visualized using Swagger UI.
 - **AsyncAPI definitions**: visualized using AsyncAPI React component.
 
-The application is designed to be deployed as a Docker container with a read-only volume mounted to provide the content.
+XeoContext is designed to be deployed as a Docker container with a read-only volume mounted to provide the content.
 
 ## Features
 
@@ -14,6 +14,10 @@ The application is designed to be deployed as a Docker container with a read-onl
 - **Static Export**: Runs entirely client-side, no backend required.
 - **Dynamic Content**: Content is loaded from the `/content` directory at runtime.
 - **Docker Ready**: Designed for volume mounting content.
+
+## AI Integration
+
+This repository is designed to be the "Source of Truth" for system design. The `public/content` directory is intended to be read by AI Coding Agents (via MCP Servers or direct access) to scaffold and maintain other repositories based on the designs defined here. But from a clean system design content repository, see `examples/markdown-openapi-asyncapi` for a quickstart.
 
 ## Usage
 
@@ -37,20 +41,59 @@ The application reads from the `public/content` directory (which becomes `/conte
 ```
 /content
 ├── xeocontext.config.json  # Main configuration
-├── system-design.md        # System design markdown
-├── openapi.yaml           # OpenAPI specification
-└── asyncapi.yaml          # AsyncAPI specification
+├── global/                 # Global documentation & shared specs
+│   ├── gateway/            # Main Entry Points (OpenAPI, AsyncAPI)
+│   │   ├── openapi.yaml
+│   │   └── asyncapi.yaml
+│   ├── infrastructure.md
+│   ├── security.md
+│   └── ...
+└── domains/                # Domain-driven documentation
+    ├── identity/           # Domain subfolders
+    │   ├── readme.md
+    │   └── openapi.yaml
+    └── ...
 ```
 
 **xeocontext.config.json Example:**
 ```json
 {
-  "title": "My API Documentation",
-  "files": {
-    "systemDesign": "system-design.md",
-    "openapi": "openapi.yaml",
-    "asyncapi": "asyncapi.yaml"
-  }
+    "projectName": "ExampleApp",
+    "projectDomain": "exampleapp.com",
+    "navigation": [
+        {
+            "title": "System Architecture",
+            "items": [
+                { "title": "Overview", "href": "/" },
+                { "title": "Infrastructure & HA", "href": "/global/infrastructure" },
+                { "title": "Security", "href": "/global/security" },
+                { "title": "Database Schema", "href": "/global/database" },
+                { "title": "Workflows", "href": "/global/workflows" }
+            ]
+        },
+        {
+            "title": "Standards & ADRs",
+            "items": [
+                { "title": "API Standards", "href": "/global/standards/api-design" },
+                { "title": "Error Handling", "href": "/global/standards/error-handling" },
+                { "title": "Code Conventions", "href": "/global/standards/code-conventions" },
+                { "title": "ADR 001 - DDD", "href": "/global/adrs/001-domain-driven-design" },
+                { "title": "ADR 002 - Local First", "href": "/global/adrs/002-local-first-sync" },
+                { "title": "ADR 003 - K8s", "href": "/global/adrs/003-k8s-infrastructure" }
+            ]
+        },
+        {
+            "title": "Domains",
+            "items": [
+                { "title": "Identity", "href": "/domains/identity" },
+                { "title": "Todos", "href": "/domains/todos" },
+                { "title": "Notes", "href": "/domains/notes" },
+                { "title": "Library (Sync)", "href": "/domains/library" }
+            ]
+        }
+    ],
+    "openapi": "/global/gateway/openapi.yaml",
+    "asyncapi": "/global/gateway/asyncapi.yaml"
 }
 ```
 
@@ -63,7 +106,3 @@ If serving via Nginx:
 ```bash
 docker run -v $(pwd)/my-content:/usr/share/nginx/html/content my-xeocontext-image
 ```
-
-## AI Integration
-
-This repository is designed to be the "Source of Truth" for system design. The `public/content` directory is intended to be read by AI Coding Agents (via MCP Servers or direct access) to scaffold and maintain other repositories based on the designs defined here.
