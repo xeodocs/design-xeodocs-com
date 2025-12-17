@@ -77,5 +77,7 @@
                 }
             ]
         }
-    ]
+    ],
+    "openapi": "/global/gateway/openapi.yaml",
+    "asyncapi": "/global/gateway/asyncapi.yaml"
 }
