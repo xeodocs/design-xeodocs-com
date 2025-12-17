@@ -14,7 +14,7 @@ export default function OpenApiPage() {
     if (!config?.files.openapi) return <div>No OpenAPI file configured.</div>;
 
     return (
-        <div className="h-full overflow-y-auto">
+        <div className="h-full overflow-y-auto w-full px-4 md:px-8 py-10">
             <OpenApiRenderer spec={`/content/${config.files.openapi}`} />
         </div>
     );

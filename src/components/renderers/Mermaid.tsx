@@ -78,7 +78,7 @@ export const Mermaid = React.memo(function Mermaid({ chart }: { chart: string })
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/90 backdrop-blur-xl p-6 animate-in fade-in duration-200">
+                <div className="fixed inset-0 z-100 flex items-center justify-center bg-background/90 backdrop-blur-xl p-6 animate-in fade-in duration-200">
                     <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden relative border border-border bg-card/30 shadow-2xl">
 
                         <TransformWrapper

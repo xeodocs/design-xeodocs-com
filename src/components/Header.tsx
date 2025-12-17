@@ -1,9 +1,9 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { Moon, Sun, Monitor, Library } from "lucide-react";
+import { Moon, Sun, Monitor, Library, Menu, X } from "lucide-react";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -14,11 +14,32 @@ interface HeaderProps {
 export function Header({ title }: HeaderProps) {
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const pathname = usePathname();
+    const headerRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [pathname]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+                setIsMobileMenuOpen(false);
+            }
+        };
+
+        if (isMobileMenuOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isMobileMenuOpen]);
 
     const isActive = (path: string) => {
         if (pathname === "/" && path === "/system") return true;
@@ -26,16 +47,16 @@ export function Header({ title }: HeaderProps) {
     };
 
     return (
-        <header className="border-b border-border bg-background/70 backdrop-blur-xl sticky top-0 z-50 supports-[backdrop-filter]:bg-background/60">
+        <header ref={headerRef} className="border-b border-border bg-background/70 backdrop-blur-xl sticky top-0 z-50 supports-backdrop-filter:bg-background/60">
             <div className="w-full px-6 h-16 flex items-center justify-between">
                 <div className="flex items-center space-x-8">
                     <Link href="/" className="flex items-center space-x-2">
-                        <h1 className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+                        <h1 className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-foreground to-foreground/70">
                             {title}
                         </h1>
                     </Link>
 
-                    <nav className="flex items-center space-x-1 bg-muted/50 p-1 rounded-full border border-border/50">
+                    <nav className="hidden md:flex items-center space-x-1 bg-muted/50 p-1 rounded-full border border-border/50">
                         <TabLink
                             label="System Design"
                             href="/system"
@@ -54,7 +75,7 @@ export function Header({ title }: HeaderProps) {
                     </nav>
                 </div>
 
-                <div className="flex items-center space-x-4">
+                <div className="hidden md:flex items-center space-x-4">
                     {mounted && (
                         <div className="flex items-center bg-muted/50 border border-border/50 rounded-full p-1">
                             {['system', 'light', 'dark'].map((t) => (
@@ -98,8 +119,86 @@ export function Header({ title }: HeaderProps) {
                         </a>
                     </div>
                 </div>
+
+                <button
+                    className="md:hidden p-2 text-muted-foreground hover:text-foreground"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
+                    {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
             </div>
+
+            {isMobileMenuOpen && (
+                <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-xl p-4 space-y-4 animate-in slide-in-from-top-2">
+                    <nav className="flex flex-col space-y-2">
+                        <MobileLink href="/system" isActive={isActive("/system")}>System Design</MobileLink>
+                        <MobileLink href="/openapi" isActive={isActive("/openapi")}>OpenAPI</MobileLink>
+                        <MobileLink href="/asyncapi" isActive={isActive("/asyncapi")}>AsyncAPI</MobileLink>
+                    </nav>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-border/50">
+                        {mounted && (
+                            <div className="flex items-center bg-muted/50 border border-border/50 rounded-full p-1">
+                                {['system', 'light', 'dark'].map((t) => (
+                                    <button
+                                        key={t}
+                                        onClick={() => setTheme(t)}
+                                        className={clsx(
+                                            "p-1.5 rounded-full transition-all duration-200",
+                                            theme === t
+                                                ? "bg-background text-foreground shadow-sm ring-1 ring-border"
+                                                : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                                        )}
+                                        title={t.charAt(0).toUpperCase() + t.slice(1)}
+                                    >
+                                        {t === 'system' && <Monitor className="w-4 h-4" />}
+                                        {t === 'light' && <Sun className="w-4 h-4" />}
+                                        {t === 'dark' && <Moon className="w-4 h-4" />}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        <div className="flex items-center space-x-2">
+                            <a
+                                href="https://github.com/xeost/xeocontext"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-full transition-colors"
+                                title="GitHub Repository"
+                            >
+                                <GithubIcon className="w-5 h-5" />
+                            </a>
+                            <a
+                                href="https://xeocontext.com/docs"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-full transition-colors"
+                                title="Documentation"
+                            >
+                                <Library className="w-5 h-5" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            )}
         </header>
+    );
+}
+
+function MobileLink({ href, isActive, children }: { href: string; isActive: boolean; children: React.ReactNode }) {
+    return (
+        <Link
+            href={href}
+            className={clsx(
+                "block px-4 py-2 rounded-md text-sm font-medium transition-colors",
+                isActive
+                    ? "bg-muted text-foreground"
+                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+            )}
+        >
+            {children}
+        </Link>
     );
 }
 
