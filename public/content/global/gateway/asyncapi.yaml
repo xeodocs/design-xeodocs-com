@@ -4,8 +4,15 @@ info:
   version: 1.0.0
   description: Master Event definition
 channels:
-  library/sync:
-    address: library/sync
+  library/changes:
+    address: library/changes
+    description: Events related to the Library structure (files added/removed)
     messages:
-      stateUpdate:
-        $ref: '../../domains/library/components/messages/StateUpdate.yaml'
+      libraryChange:
+        $ref: '../../domains/library/components/messages/LibraryChange.yaml'
+  library/viewers:
+    address: library/viewers
+    description: Events related to file viewing state (sync)
+    messages:
+      viewerSync:
+        $ref: '../../domains/library/components/messages/ViewerSync.yaml'

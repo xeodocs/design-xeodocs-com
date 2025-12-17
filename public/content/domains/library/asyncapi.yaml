@@ -4,8 +4,15 @@ info:
   version: 1.0.0
   description: Real-time synchronization events for Library and Viewers
 channels:
-  library/sync:
-    address: library/sync
+  library/changes:
+    address: library/changes
+    description: Events related to the Library structure (files added/removed)
     messages:
-      stateUpdate:
-        $ref: './components/messages/StateUpdate.yaml'
+      libraryChange:
+        $ref: './components/messages/LibraryChange.yaml'
+  library/viewers:
+    address: library/viewers
+    description: Events related to file viewing state (sync)
+    messages:
+      viewerSync:
+        $ref: './components/messages/ViewerSync.yaml'
