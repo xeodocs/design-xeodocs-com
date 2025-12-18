@@ -99,10 +99,32 @@ The application reads from the `public/content` directory (which becomes `/conte
 
 ### Docker Deployment
 
-To update the content without rebuilding the image, mount a volume to `/app/public/content` (or wherever the static assets are served from, usually just `/content` relative to the web root if served via Nginx, but for Next.js static export `out`, it would be inside the web root).
+To update the content without rebuilding the image, mount the content directories and configuration file as volumes.
 
-When running the static export, the output is in `out`.
-If serving via Nginx:
+Example with Docker Compose:
+
+```yaml
+version: '3.8'
+
+services:
+  xeocontext:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: xeocontext_example_app
+    ports:
+      - "3000:80"
+    volumes:
+      # Mount the configuration file
+      - ./xeocontext.config.json:/usr/share/nginx/html/content/xeocontext.config.json
+      # Mount the content directories
+      - ./global:/usr/share/nginx/html/content/global
+      - ./domains:/usr/share/nginx/html/content/domains
+    restart: unless-stopped
+```
+
+Then, run it:
+
 ```bash
-docker run -v $(pwd)/my-content:/usr/share/nginx/html/content my-xeocontext-image
+docker compose up -d
 ```
