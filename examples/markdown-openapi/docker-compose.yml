@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  xeocontext:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: xeocontext_example_app
+    ports:
+      - "3000:80"
+    volumes:
+      # Mount the configuration file
+      - ./xeocontext.config.json:/usr/share/nginx/html/content/xeocontext.config.json
+      # Mount the content directories
+      - ./global:/usr/share/nginx/html/content/global
+      - ./domains:/usr/share/nginx/html/content/domains
+    restart: unless-stopped
