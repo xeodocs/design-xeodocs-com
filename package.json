@@ -11,8 +11,6 @@
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^15.1.3",
     "@apidevtools/swagger-parser": "^12.1.0",
-    "@asyncapi/parser": "^3.4.0",
-    "@asyncapi/react-component": "^2.6.5",
     "@tailwindcss/typography": "^0.5.19",
     "clsx": "^2.1.1",
     "highlight.js": "^11.11.1",

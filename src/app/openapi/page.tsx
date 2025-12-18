@@ -56,7 +56,11 @@ export default async function OpenAPIPage() {
                 </div>
 
                 <div className="w-full">
-                    <OpenAPIViewer spec={bundledSpec as Record<string, any>} />
+                    {/* 
+                        Ensure the spec is passed as a plain object to avoid issues with 
+                        SwaggerParser's internal types or prototypes that might confuse SwaggerUI.
+                    */}
+                    <OpenAPIViewer spec={JSON.parse(JSON.stringify(bundledSpec))} />
                 </div>
             </div>
         </div>
