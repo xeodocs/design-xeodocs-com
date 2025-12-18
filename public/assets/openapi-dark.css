@@ -1,0 +1,229 @@
+
+/* Swagger UI Dark Mode Overrides */
+
+/* Base Colors */
+body .swagger-ui {
+    color: #e2e8f0;
+}
+
+/* Main Backgrounds */
+.swagger-ui .info, 
+.swagger-ui .scheme-container, 
+.swagger-ui .opblock .opblock-section-header,
+.swagger-ui .opblock-action-summary {
+    background-color: #020817 !important;
+    color: #e2e8f0;
+}
+
+/* Invert the main container */
+.swagger-wrapper {
+    background-color: #020817 !important;
+}
+
+/* Headings and Text */
+.swagger-ui .info .title, 
+.swagger-ui .info h1, .swagger-ui .info h2, .swagger-ui .info h3, .swagger-ui .info h4, .swagger-ui .info h5, 
+.swagger-ui .opblock-tag,
+.swagger-ui .opblock .opblock-summary-operation-id, 
+.swagger-ui .opblock .opblock-summary-path,
+.swagger-ui .opblock .opblock-summary-path__deprecated, 
+.swagger-ui .info .base-url,
+.swagger-ui .model-title,
+.swagger-ui .prop-type,
+.swagger-ui table thead tr th,
+.swagger-ui table thead tr td,
+.swagger-ui .response-col_status,
+.swagger-ui .response-col_links,
+.swagger-ui .parameter__name,
+.swagger-ui .parameter__type,
+.swagger-ui .parameter__in {
+    color: #f8fafc !important;
+}
+
+.swagger-ui .info p, .swagger-ui .info li, .swagger-ui .info table,
+.swagger-ui .opblock-description-wrapper p,
+.swagger-ui .opblock-external-docs-wrapper p,
+.swagger-ui .opblock-title_normal p {
+    color: #cbd5e1 !important;
+}
+
+/* Operations Blocks */
+/* GET */
+.swagger-ui .opblock.opblock-get {
+    background: rgba(97, 175, 254, 0.1);
+    border-color: #61affe;
+}
+.swagger-ui .opblock.opblock-get .opblock-summary-method {
+    background: #61affe;
+}
+/* POST */
+.swagger-ui .opblock.opblock-post {
+    background: rgba(73, 204, 144, 0.1);
+    border-color: #49cc90;
+}
+.swagger-ui .opblock.opblock-post .opblock-summary-method {
+    background: #49cc90;
+}
+/* PUT */
+.swagger-ui .opblock.opblock-put {
+    background: rgba(252, 161, 48, 0.1);
+    border-color: #fca130;
+}
+.swagger-ui .opblock.opblock-put .opblock-summary-method {
+    background: #fca130;
+}
+/* DELETE */
+.swagger-ui .opblock.opblock-delete {
+    background: rgba(249, 62, 62, 0.1);
+    border-color: #f93e3e;
+}
+.swagger-ui .opblock.opblock-delete .opblock-summary-method {
+    background: #f93e3e;
+}
+
+/* Expanded Section Backgrounds */
+.swagger-ui .opblock .opblock-section-header {
+    background-color: #0f172a !important;
+}
+.swagger-ui .responses-inner h4, .swagger-ui .responses-inner h5 {
+    color: #e2e8f0;
+}
+
+/* Tables and Inputs */
+.swagger-ui table tbody tr td {
+    color: #cbd5e1 !important;
+}
+.swagger-ui input, 
+.swagger-ui textarea, 
+.swagger-ui select {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid #334155 !important;
+}
+
+/* Models / Schemas */
+.swagger-ui section.models {
+    border-color: #334155;
+}
+.swagger-ui section.models h4 {
+    color: #e2e8f0;
+}
+.swagger-ui .model-box {
+    background-color: #020817;
+}
+.swagger-ui .model {
+    color: #cbd5e1;
+}
+.swagger-ui .model-toggle:after {
+    filter: invert(1);
+}
+
+/* Authorize Modal */
+.swagger-ui .dialog-ux .modal-ux {
+    background-color: #020817;
+    border: 1px solid #334155;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+.swagger-ui .dialog-ux .modal-ux-header {
+    border-bottom: 1px solid #334155;
+}
+.swagger-ui .dialog-ux .modal-ux-content {
+    background-color: #020817;
+}
+
+/* SVGs and Icons */
+.swagger-ui .arrow {
+    fill: #e2e8f0;
+}
+.swagger-ui .expand-methods svg, .swagger-ui .expand-operation svg {
+    fill: #e2e8f0;
+}
+
+/* Code Blocks */
+.swagger-ui .highlight-code > .microlight {
+    background-color: #0f172a !important;
+}
+
+
+/* OpenAPI Dark Mode - Refined Contrast */
+
+/* ... (previous content kept) ... */
+
+/* High Contrast Fixes */
+
+/* 1. Operation Descriptions & Summaries */
+.swagger-ui .opblock .opblock-summary-description {
+    color: #94a3b8 !important; /* slate-400 - was dark grey */
+}
+
+/* 2. Schema / Model Properties */
+.swagger-ui .model-title {
+    color: #f1f5f9 !important; /* slate-100 */
+}
+.swagger-ui .property-name, 
+.json-schema-2020-12__title {
+    color: #e2e8f0 !important; /* slate-200 */
+}
+.swagger-ui .prop-type,
+.json-schema-2020-12__attribute {
+    color: #60a5fa !important; /* blue-400 */
+}
+
+/* 3. Parameter Tables */
+.swagger-ui .parameter__name {
+    color: #f8fafc !important; /* slate-50 */
+}
+.swagger-ui .parameter__type {
+    color: #94a3b8 !important; /* slate-400 */
+}
+.swagger-ui .parameter__in {
+    color: #cbd5e1 !important; /* slate-300 */
+}
+
+/* 4. Secondary Descriptions */
+.swagger-ui .opblock-description-wrapper p,
+.swagger-ui .opblock-external-docs-wrapper p,
+.swagger-ui .opblock-title_normal p {
+    color: #cbd5e1 !important; /* slate-300 */
+}
+
+/* 5. Constraints & Badges */
+.swagger-ui .prop-format,
+.json-schema-2020-12__constraint {
+    color: #e2e8f0 !important;
+}
+
+/* 6. Ensure link colors are visible */
+.swagger-ui a {
+    color: #60a5fa !important;
+}
+
+
+/* Fix SVG Icons (Arrows for Expand/Collapse) */
+.swagger-ui .model-box-control svg,
+.swagger-ui .models-control svg,
+.swagger-ui .opblock-summary-control svg {
+    fill: #f8fafc !important; /* Force icons to be white/slate-50 */
+}
+
+/* Ensure rotated state is also visible */
+.swagger-ui .arrow {
+    fill: #f8fafc !important;
+}
+
+
+/* Fix for Schema accordion arrows and Expand/Collapse icons in all states */
+.swagger-ui .json-schema-2020-12-accordion__icon svg,
+.swagger-ui .json-schema-2020-12-expand-deep-button svg,
+.swagger-ui .model-box-control svg,
+.swagger-ui .models-control svg,
+.swagger-ui .model-toggle svg,
+.swagger-ui .opblock-summary-control svg {
+    fill: #f8fafc !important; /* Force icons to be white/slate-50 */
+}
+
+/* Specific targeted fix for the "Expand all" icon next to text */
+.swagger-ui button.json-schema-2020-12-expand-deep-button {
+    color: #f8fafc !important;
+}
+

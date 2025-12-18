@@ -3,6 +3,8 @@
 import dynamic from "next/dynamic";
 import "swagger-ui-react/swagger-ui.css";
 import { Loader2 } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
     ssr: false,
@@ -18,8 +20,20 @@ interface OpenAPIViewerProps {
 }
 
 export function OpenAPIViewer({ spec }: OpenAPIViewerProps) {
+    const { resolvedTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const isDark = mounted && resolvedTheme === "dark";
+
     return (
-        <div className="swagger-wrapper bg-white backdrop-blur-sm rounded-xl overflow-hidden shadow-sm border border-border/50">
+        <div className="swagger-wrapper bg-white dark:bg-[#020817] backdrop-blur-sm rounded-xl overflow-hidden shadow-sm border border-border/50 dark:border-border/10">
+            {isDark && (
+                <link rel="stylesheet" href="/assets/openapi-dark.css" />
+            )}
             <style jsx global>{`
         .swagger-ui .wrapper {
           padding: 0;
