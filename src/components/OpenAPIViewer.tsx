@@ -1,19 +1,9 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import "swagger-ui-react/swagger-ui.css";
-import { Loader2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import "swagger-ui-dist/swagger-ui.css";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
-
-const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
-    ssr: false,
-    loading: () => (
-        <div className="flex items-center justify-center p-12">
-            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
-        </div>
-    ),
-});
+import { Loader2 } from "lucide-react";
 
 interface OpenAPIViewerProps {
     spec: Record<string, any>;
@@ -22,12 +12,54 @@ interface OpenAPIViewerProps {
 export function OpenAPIViewer({ spec }: OpenAPIViewerProps) {
     const { resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setMounted(true);
     }, []);
 
     const isDark = mounted && resolvedTheme === "dark";
+
+    useEffect(() => {
+        if (!mounted || !containerRef.current) return;
+
+        const initSwagger = async () => {
+            /**
+            * CRITICAL: We use 'swagger-ui-dist' with manual initialization instead of 'swagger-ui-react'.
+            * 
+            * REASON: 
+            * 'swagger-ui-react' (versions > 5.0) causes severe "refract is not a function" errors 
+            * in Next.js/Turbopack environments due to issues with the internal 'swagger-client' and 'apidom' dependencies.
+            * 
+            * This manual approach isolates the Swagger bundle from the React build process, ensuring stability.
+            * DO NOT SWITCH BACK TO 'swagger-ui-react' UNLESS THIS COMPATIBILITY ISSUE IS CONFIRMED FIXED.
+            */
+
+            // Dynamically import the bundle to avoid SSR issues
+            // @ts-ignore - The declaration file might be missing for the bundle specifically
+            const SwaggerUIBundle = (await import("swagger-ui-dist/swagger-ui-bundle")).default;
+
+            SwaggerUIBundle({
+                spec: spec,
+                domNode: containerRef.current,
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIBundle.SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "BaseLayout",
+                docExpansion: "list",
+                syntaxHighlight: {
+                    theme: "monokai" // Optional: helps with code blocks
+                }
+            });
+        };
+
+        initSwagger();
+    }, [mounted, spec]);
 
     return (
         <div className="swagger-wrapper bg-white dark:bg-[#020817] backdrop-blur-sm rounded-xl overflow-hidden shadow-sm border border-border/50 dark:border-border/10">
@@ -63,8 +95,14 @@ export function OpenAPIViewer({ spec }: OpenAPIViewerProps) {
             box-shadow: none;
             border: 1px solid rgba(0,0,0,0.1);
         }
-      `}</style>
-            <SwaggerUI spec={spec} />
+            `}</style>
+            {!mounted ? (
+                <div className="flex items-center justify-center p-12">
+                    <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+                </div>
+            ) : (
+                <div ref={containerRef} />
+            )}
         </div>
     );
 }

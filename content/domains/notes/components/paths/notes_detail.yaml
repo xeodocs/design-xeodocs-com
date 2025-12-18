@@ -7,6 +7,9 @@ parameters:
       format: uuid
 get:
   summary: Get note
+  operationId: notesGet
+  security:
+    - BearerAuth: []
   tags: [Notes]
   responses:
     '200':
@@ -18,8 +21,13 @@ get:
             properties:
               data:
                 $ref: '../schemas/Note.yaml'
+    '404':
+      description: Note not found
 put:
   summary: Update note
+  operationId: notesUpdate
+  security:
+    - BearerAuth: []
   tags: [Notes]
   requestBody:
     required: true
@@ -37,9 +45,16 @@ put:
             properties:
               data:
                 $ref: '../schemas/Note.yaml'
+    '404':
+      description: Note not found
 delete:
   summary: Delete note
+  operationId: notesDelete
+  security:
+    - BearerAuth: []
   tags: [Notes]
   responses:
     '204':
       description: Note deleted
+    '404':
+      description: Note not found

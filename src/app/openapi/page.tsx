@@ -25,8 +25,9 @@ export default async function OpenAPIPage() {
     let errorMsg = null;
 
     try {
-        // Bundle the API definition (resolves external $refs to other files)
-        bundledSpec = await SwaggerParser.bundle(openApiFilePath);
+        // Dereference the API definition (resolves ALL $refs to inline objects)
+        // This is crucial to avoid client-side resolution errors with OpenAPI 3.1
+        bundledSpec = await SwaggerParser.dereference(openApiFilePath);
     } catch (err: any) {
         console.error("Error bundling OpenAPI spec:", err);
         errorMsg = err.message || "Unknown error bundling API specification";

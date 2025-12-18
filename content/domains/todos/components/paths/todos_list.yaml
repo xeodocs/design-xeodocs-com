@@ -1,5 +1,8 @@
 get:
   summary: List todos
+  operationId: todosList
+  security:
+    - BearerAuth: []
   tags: [Todos]
   parameters:
     - name: page
@@ -35,8 +38,13 @@ get:
                     type: integer
                   page:
                     type: integer
+    '401':
+      description: Unauthorized
 post:
   summary: Create todo
+  operationId: todosCreate
+  security:
+    - BearerAuth: []
   tags: [Todos]
   requestBody:
     required: true
@@ -58,3 +66,5 @@ post:
             properties:
               data:
                 $ref: '../schemas/Todo.yaml'
+    '401':
+      description: Unauthorized

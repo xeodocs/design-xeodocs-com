@@ -1,5 +1,8 @@
 post:
   summary: Synchronize library state
+  operationId: librarySync
+  security:
+    - BearerAuth: []
   description: Handles local-first synchronization. Accepts client changes and returns server changes.
   tags: [Library]
   requestBody:
@@ -18,3 +21,5 @@ post:
             properties:
               data:
                 $ref: '../schemas/SyncPayload.yaml'
+    '401':
+      description: Unauthorized

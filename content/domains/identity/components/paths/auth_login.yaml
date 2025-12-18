@@ -1,5 +1,7 @@
 post:
   summary: Login user
+  operationId: authLogin
+  security: []
   tags:
     - Auth
   requestBody:
@@ -18,3 +20,5 @@ post:
             properties:
               data:
                 $ref: '../schemas/AuthResponse.yaml'
+    '400':
+      description: Invalid credentials

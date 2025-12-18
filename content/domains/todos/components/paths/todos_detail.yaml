@@ -7,6 +7,9 @@ parameters:
       format: uuid
 get:
   summary: Get todo
+  operationId: todosGet
+  security:
+    - BearerAuth: []
   tags: [Todos]
   responses:
     '200':
@@ -18,8 +21,13 @@ get:
             properties:
               data:
                 $ref: '../schemas/Todo.yaml'
+    '404':
+      description: Todo not found
 put:
   summary: Update todo
+  operationId: todosUpdate
+  security:
+    - BearerAuth: []
   tags: [Todos]
   requestBody:
     required: true
@@ -37,9 +45,16 @@ put:
             properties:
               data:
                 $ref: '../schemas/Todo.yaml'
+    '404':
+      description: Todo not found
 delete:
   summary: Delete todo
+  operationId: todosDelete
+  security:
+    - BearerAuth: []
   tags: [Todos]
   responses:
     '204':
       description: Todo deleted
+    '404':
+      description: Todo not found

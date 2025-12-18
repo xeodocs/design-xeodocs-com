@@ -1,5 +1,8 @@
 get:
   summary: List notes
+  operationId: notesList
+  security:
+    - BearerAuth: []
   tags: [Notes]
   parameters:
     - name: page
@@ -29,8 +32,13 @@ get:
                 properties:
                   total:
                     type: integer
+    '401':
+      description: Unauthorized
 post:
   summary: Create note
+  operationId: notesCreate
+  security:
+    - BearerAuth: []
   tags: [Notes]
   requestBody:
     required: true
@@ -53,3 +61,5 @@ post:
             properties:
               data:
                 $ref: '../schemas/Note.yaml'
+    '401':
+      description: Unauthorized
