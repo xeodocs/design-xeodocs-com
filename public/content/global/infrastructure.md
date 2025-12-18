@@ -8,7 +8,7 @@ The ExampleApp is designed to be deployed on a Kubernetes (K8s) cluster to ensur
 
 ```mermaid
 graph TD
-    Client[Client Apps (Web/Mobile)] -->|HTTPS| LoadBalancer
+    Client["Client Apps (Web/Mobile)"] -->|HTTPS| LoadBalancer
     LoadBalancer --> Ingress[Ingress Controller]
     Ingress --> Gateway[API Gateway]
     

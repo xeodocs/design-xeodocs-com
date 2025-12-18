@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   xeocontext:
     build:
-      context: ..
+      context: ../..
       dockerfile: Dockerfile
     container_name: xeocontext_example_app
     ports:

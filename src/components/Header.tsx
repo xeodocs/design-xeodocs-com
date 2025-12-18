@@ -1,5 +1,6 @@
 "use client";
 
+import { useConfig } from "@/lib/config-context";
 import { useTheme } from "next-themes";
 import { Moon, Sun, Monitor, Library, Menu, X } from "lucide-react";
 import clsx from "clsx";
@@ -12,6 +13,7 @@ interface HeaderProps {
 }
 
 export function Header({ title }: HeaderProps) {
+    const { config } = useConfig();
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -62,16 +64,20 @@ export function Header({ title }: HeaderProps) {
                             href="/system"
                             isActive={isActive("/system")}
                         />
-                        <TabLink
-                            label="OpenAPI"
-                            href="/openapi"
-                            isActive={isActive("/openapi")}
-                        />
-                        <TabLink
-                            label="AsyncAPI"
-                            href="/asyncapi"
-                            isActive={isActive("/asyncapi")}
-                        />
+                        {config?.openapi && (
+                            <TabLink
+                                label="OpenAPI"
+                                href="/openapi"
+                                isActive={isActive("/openapi")}
+                            />
+                        )}
+                        {config?.asyncapi && (
+                            <TabLink
+                                label="AsyncAPI"
+                                href="/asyncapi"
+                                isActive={isActive("/asyncapi")}
+                            />
+                        )}
                     </nav>
                 </div>
 
@@ -132,8 +138,12 @@ export function Header({ title }: HeaderProps) {
                 <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-xl p-4 space-y-4 animate-in slide-in-from-top-2">
                     <nav className="flex flex-col space-y-2">
                         <MobileLink href="/system" isActive={isActive("/system")}>System Design</MobileLink>
-                        <MobileLink href="/openapi" isActive={isActive("/openapi")}>OpenAPI</MobileLink>
-                        <MobileLink href="/asyncapi" isActive={isActive("/asyncapi")}>AsyncAPI</MobileLink>
+                        {config?.openapi && (
+                            <MobileLink href="/openapi" isActive={isActive("/openapi")}>OpenAPI</MobileLink>
+                        )}
+                        {config?.asyncapi && (
+                            <MobileLink href="/asyncapi" isActive={isActive("/asyncapi")}>AsyncAPI</MobileLink>
+                        )}
                     </nav>
 
                     <div className="flex items-center justify-between pt-4 border-t border-border/50">
