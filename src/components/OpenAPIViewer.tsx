@@ -6,10 +6,11 @@ import { useTheme } from "next-themes";
 import { Loader2 } from "lucide-react";
 
 interface OpenAPIViewerProps {
-    spec: Record<string, any>;
+    spec?: Record<string, any>;
+    url?: string;
 }
 
-export function OpenAPIViewer({ spec }: OpenAPIViewerProps) {
+export function OpenAPIViewer({ spec, url }: OpenAPIViewerProps) {
     const { resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -22,6 +23,7 @@ export function OpenAPIViewer({ spec }: OpenAPIViewerProps) {
 
     useEffect(() => {
         if (!mounted || !containerRef.current) return;
+        if (!spec && !url) return;
 
         const initSwagger = async () => {
             /**
@@ -41,8 +43,9 @@ export function OpenAPIViewer({ spec }: OpenAPIViewerProps) {
 
             SwaggerUIBundle({
                 spec: spec,
+                url: url,
                 domNode: containerRef.current,
-                deepLinking: true,
+                deepLinking: false,
                 presets: [
                     SwaggerUIBundle.presets.apis,
                     SwaggerUIBundle.SwaggerUIStandalonePreset
@@ -59,7 +62,7 @@ export function OpenAPIViewer({ spec }: OpenAPIViewerProps) {
         };
 
         initSwagger();
-    }, [mounted, spec]);
+    }, [mounted, spec, url]);
 
     return (
         <div className="swagger-wrapper bg-white dark:bg-[#020817] backdrop-blur-sm rounded-xl overflow-hidden shadow-sm border border-border/50 dark:border-border/10">

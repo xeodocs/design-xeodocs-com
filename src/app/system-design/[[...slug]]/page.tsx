@@ -1,4 +1,4 @@
-import { SystemPageClient } from "./client";
+// import { SystemPageClient } from "./client";
 import { getServerConfig } from "@/lib/server-utils"; // Import helper
 
 export async function generateStaticParams() {
@@ -34,5 +34,5 @@ export async function generateStaticParams() {
 }
 
 export default function Page() {
-    return <SystemPageClient />;
+    return null;
 }

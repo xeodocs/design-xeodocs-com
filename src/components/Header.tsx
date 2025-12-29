@@ -8,6 +8,8 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useNav } from "@/lib/nav-context";
+
 interface HeaderProps {
     title: string;
 }
@@ -15,6 +17,7 @@ interface HeaderProps {
 export function Header({ title }: HeaderProps) {
     const { config } = useConfig();
     const { theme, setTheme } = useTheme();
+    const { lastSystemPath } = useNav();
     const [mounted, setMounted] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const pathname = usePathname();
@@ -24,24 +27,7 @@ export function Header({ title }: HeaderProps) {
         setMounted(true);
     }, []);
 
-    useEffect(() => {
-        setIsMobileMenuOpen(false);
-    }, [pathname]);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
-                setIsMobileMenuOpen(false);
-            }
-        };
-
-        if (isMobileMenuOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [isMobileMenuOpen]);
+    // ... (rest of useEffects)
 
     const isActive = (path: string) => {
         if (pathname === "/" && path === "/system-design") return true;
@@ -61,7 +47,7 @@ export function Header({ title }: HeaderProps) {
                     <nav className="hidden md:flex items-center space-x-1 bg-muted/50 p-1 rounded-full border border-border/50">
                         <TabLink
                             label="System Design"
-                            href="/system-design"
+                            href={lastSystemPath}
                             isActive={isActive("/system-design")}
                         />
                         {config?.openapi && (
@@ -82,12 +68,14 @@ export function Header({ title }: HeaderProps) {
                 </div>
 
                 <div className="hidden md:flex items-center space-x-4">
+                    {/* ... */}
                     {mounted && (
                         <div className="flex items-center bg-muted/50 border border-border/50 rounded-full p-1">
                             {['system', 'light', 'dark'].map((t) => (
                                 <button
                                     key={t}
                                     onClick={() => setTheme(t)}
+                                    // ...
                                     className={clsx(
                                         "p-1.5 rounded-full transition-all duration-200",
                                         theme === t
@@ -103,7 +91,6 @@ export function Header({ title }: HeaderProps) {
                             ))}
                         </div>
                     )}
-
                     <div className="flex items-center space-x-2 border-l border-border/50 pl-4">
                         <a
                             href="https://github.com/xeost/xeocontext"
@@ -137,7 +124,7 @@ export function Header({ title }: HeaderProps) {
             {isMobileMenuOpen && (
                 <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-xl p-4 space-y-4 animate-in slide-in-from-top-2">
                     <nav className="flex flex-col space-y-2">
-                        <MobileLink href="/system-design" isActive={isActive("/system-design")}>System Design</MobileLink>
+                        <MobileLink href={lastSystemPath} isActive={isActive("/system-design")}>System Design</MobileLink>
                         {config?.openapi && (
                             <MobileLink href="/openapi" isActive={isActive("/openapi")}>OpenAPI</MobileLink>
                         )}
