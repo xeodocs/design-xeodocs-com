@@ -12,13 +12,24 @@ export function PersistentViews() {
     const pathname = usePathname();
     const [mounted, setMounted] = useState(false);
 
+    const isSystemDesign = pathname === "/" || pathname.startsWith("/system-design");
+    const isOpenAPI = pathname.startsWith("/openapi");
+    const isAsyncAPI = pathname.startsWith("/asyncapi");
+
     useEffect(() => {
         setMounted(true);
     }, []);
 
-    const isSystemDesign = pathname === "/" || pathname.startsWith("/system-design");
-    const isOpenAPI = pathname.startsWith("/openapi");
-    const isAsyncAPI = pathname.startsWith("/asyncapi");
+    useEffect(() => {
+        if (!config?.projectName) return;
+        const suffix = ` - ${config.projectName}`;
+
+        if (isOpenAPI) {
+            document.title = `OpenAPI${suffix}`;
+        } else if (isAsyncAPI) {
+            document.title = `AsyncAPI${suffix}`;
+        }
+    }, [isOpenAPI, isAsyncAPI, config?.projectName]);
 
     // Construct full URLs for specs. 
     // config.openapi is relative like "/global/gateway/openapi.yaml"

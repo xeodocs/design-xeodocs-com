@@ -20,6 +20,27 @@ interface SystemDesignViewerProps {
     isActive: boolean;
 }
 
+const parseFrontmatter = (text: string) => {
+    const pattern = /^---\n([\s\S]*?)\n---\n/;
+    const match = text.match(pattern);
+    if (!match) return { attributes: {} as Record<string, string>, body: text };
+
+    const yaml = match[1];
+    const body = text.replace(pattern, '');
+    const attributes: Record<string, string> = {};
+
+    yaml.split('\n').forEach(line => {
+        const parts = line.split(':');
+        if (parts.length >= 2) {
+            const key = parts[0].trim();
+            const value = parts.slice(1).join(':').trim().replace(/^['"](.*)['"]$/, '$1');
+            attributes[key] = value;
+        }
+    });
+
+    return { attributes, body };
+};
+
 export function SystemDesignViewer({ isActive }: SystemDesignViewerProps) {
     const { config } = useConfig();
     const { lastSystemPath, isInitialized } = useNav();
@@ -30,6 +51,7 @@ export function SystemDesignViewer({ isActive }: SystemDesignViewerProps) {
     const [isRestored, setIsRestored] = useState(false);
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
     const [mobileTab, setMobileTab] = useState<"menu" | "toc">("menu");
+    const [pageMeta, setPageMeta] = useState<{ title?: string; description?: string }>({});
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     // Derive slugPath from lastSystemPath
@@ -89,6 +111,25 @@ export function SystemDesignViewer({ isActive }: SystemDesignViewerProps) {
     const matchedItem = allItems.find(item => item.href === slugPath);
     const activeItem = matchedItem || (slugPath === "/" ? allItems[0] : undefined);
 
+    // Update document metadata
+    useEffect(() => {
+        if (!isActive) return;
+
+        if (pageMeta.title) {
+            const suffix = config?.projectName ? ` - ${config.projectName}` : '';
+            document.title = `${pageMeta.title}${suffix}`;
+        }
+        if (pageMeta.description) {
+            let meta = document.querySelector('meta[name="description"]');
+            if (!meta) {
+                meta = document.createElement('meta');
+                meta.setAttribute('name', 'description');
+                document.head.appendChild(meta);
+            }
+            meta.setAttribute('content', pageMeta.description);
+        }
+    }, [pageMeta, config?.projectName, isActive]);
+
     useEffect(() => {
         // Only load if configured AND initialized
         if (!config?.navigation || !isInitialized) return;
@@ -96,6 +137,7 @@ export function SystemDesignViewer({ isActive }: SystemDesignViewerProps) {
         async function load() {
             setLoading(true);
             setIsRestored(false);
+            setPageMeta({}); // Reset meta
             try {
                 if (activeItem) {
                     // Redirect logic: ONLY if active
@@ -119,7 +161,22 @@ export function SystemDesignViewer({ isActive }: SystemDesignViewerProps) {
                         try {
                             const found = await fetchContent(p);
                             if (found) {
-                                setContent(found);
+                                const { attributes, body } = parseFrontmatter(found);
+                                let finalContent = body;
+
+                                // Set meta
+                                setPageMeta({
+                                    title: attributes.title,
+                                    description: attributes.description
+                                });
+
+                                // Check for H1
+                                const hasH1 = /^#\s/.test(body) || /\n#\s/.test(body);
+                                if (!hasH1 && attributes.title) {
+                                    finalContent = `# ${attributes.title}\n\n${body}`;
+                                }
+
+                                setContent(finalContent);
                                 setLoadedSlug(slugPath);
                                 setLoading(false);
                                 return;
