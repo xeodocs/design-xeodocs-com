@@ -12,10 +12,11 @@ declare global {
 }
 
 interface AsyncAPIViewerProps {
-    schema: any;
+    schema?: any;
+    url?: string;
 }
 
-export function AsyncAPIViewer({ schema }: AsyncAPIViewerProps) {
+export function AsyncAPIViewer({ schema, url }: AsyncAPIViewerProps) {
     const componentRef = useRef<HTMLElement>(null);
     const { resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
@@ -30,13 +31,17 @@ export function AsyncAPIViewer({ schema }: AsyncAPIViewerProps) {
     }, []);
 
     useEffect(() => {
-        if (componentRef.current && schema) {
-            // Pass the schema object directly to the property
-            (componentRef.current as any).schema = schema;
+        if (componentRef.current) {
+            if (schema) {
+                (componentRef.current as any).schema = schema;
+            } else if (url) {
+                // The web component supports 'schemaUrl' property/attribute
+                (componentRef.current as any).schemaUrl = url;
+            }
         }
-    }, [schema]);
+    }, [schema, url]);
 
-    if (!schema) return null;
+    if (!schema && !url) return null;
 
     // Use correct stylesheet based on theme
     const isDark = mounted && resolvedTheme === "dark";
@@ -58,7 +63,6 @@ export function AsyncAPIViewer({ schema }: AsyncAPIViewerProps) {
                 ref={componentRef}
                 cssImportPath={cssPath}
                 config='{"showErrors": true, "sidebar": {"show": true}}'>
-                {/* @ts-ignore - Web Component */}
             </asyncapi-component>
         </div>
     );

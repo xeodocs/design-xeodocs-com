@@ -2,6 +2,7 @@
 
 import { useConfig } from "@/lib/config-context";
 import { Header } from "@/components/Header";
+import { PersistentViews } from "@/components/PersistentViews";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
     const { config, loading, error } = useConfig();
@@ -32,6 +33,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
             <Header title={config.projectName || "Xeocontext"} />
             <main className="flex-1 flex flex-col overflow-hidden relative">
+                <PersistentViews />
                 {children}
             </main>
         </div>
