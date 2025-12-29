@@ -256,11 +256,57 @@ export function SystemDesignViewer({ isActive }: SystemDesignViewerProps) {
     }, [content]);
 
     useEffect(() => {
-        if (!toc.length) return;
-        const observer = new IntersectionObserver((entries) => { entries.forEach((entry) => { if (entry.isIntersecting) { setActiveId(entry.target.id); } }); }, { rootMargin: "0px 0px -80% 0px" });
-        toc.forEach((item) => { const element = document.getElementById(item.id); if (element) observer.observe(element); });
-        return () => observer.disconnect();
-    }, [toc]);
+        if (!toc.length || loading) return;
+
+        let observer: IntersectionObserver | null = null;
+        let intervalId: NodeJS.Timeout | null = null;
+        let attempts = 0;
+        const maxAttempts = 20; // 2 seconds max retry
+
+        const tryAttach = () => {
+            // Try to find the first header. If it exists, we assume DOM is largely ready.
+            // We could check all, but checking the first one is usually a good proxy check.
+            const firstItem = toc[0];
+            if (!firstItem) return true; // nothing to observe, stop
+
+            if (document.getElementById(firstItem.id)) {
+                // Elements found, attach observer
+                observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            setActiveId(entry.target.id);
+                        }
+                    });
+                }, {
+                    root: scrollContainerRef.current,
+                    rootMargin: "0px 0px -80% 0px"
+                });
+
+                toc.forEach((item) => {
+                    const element = document.getElementById(item.id);
+                    if (element) observer?.observe(element);
+                });
+                return true; // Success
+            }
+            return false; // Not ready
+        };
+
+        // Attempt immediately
+        if (tryAttach()) return () => observer?.disconnect();
+
+        // Poll if not ready
+        intervalId = setInterval(() => {
+            attempts++;
+            if (tryAttach() || attempts >= maxAttempts) {
+                if (intervalId) clearInterval(intervalId);
+            }
+        }, 100);
+
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+            if (observer) observer.disconnect();
+        };
+    }, [toc, loading]);
 
     // Render helper for sidebar links
     const renderSidebarLink = (item: NavItem) => {
