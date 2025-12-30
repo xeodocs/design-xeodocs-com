@@ -105,6 +105,12 @@ function ensureGitRemote() {
         } else {
             console.log('   "origin" remote is correctly configured.');
         }
+
+        // Set main to track origin/main
+        // Using git config directly allows setting this even if we haven't fetched origin yet (empty repo)
+        console.log('   Configuring "main" branch to track "origin/main"...');
+        runCmd('git config branch.main.remote origin');
+        runCmd('git config branch.main.merge refs/heads/main');
     }
 }
 
