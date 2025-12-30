@@ -1,3 +1,0 @@
-schema:
-  type: integer
-description: The number of remaining requests in the current period
